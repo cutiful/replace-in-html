@@ -44,13 +44,35 @@ replaceInHtml(
 // <p>How about... <img class="custom_emoji" title=":lightbulb:" alt=":lightbulb:" src="https://cdn.example.org/i/emoji/lightbulb.png"> custom emoji tags? <img class="custom_emoji" title=":blobcat:" alt=":blobcat:" src="https://cdn.example.org/i/emoji/blobcat.png"></p>
 ```
 
+## Installation
+### Webpack / Rollup
+```sh
+$ yarn add replace-in-html
+```
+then in JS:
+```js
+import replaceInHtml from "replace-in-html";
+
+const replaced = replaceInHtml("<p>original html</p>", /original/g, "modified");
+console.log(replaced);
+```
+
+### Browser
+```html
+<script src="https://unpkg.com/replace-in-html@1.0.1/dist/replace-in-html.js"></script>
+<script>
+  const replaced = window.replaceInHtml.default("<p>original html</p>", /original/g, "modified");
+  console.log(replaced);
+</script>
+```
+
 ## Usage
 ```js
 replaceInHtml(html, search, replacer)
 ```
 
 - `html`: a string containing the HTML to perform the replacing on (note that it can't be a document with `<html>`, `<head>` or `<body>`; it should only contain elements that go inside `<body>`)
-- `search`: a string or a `RegExp` to replace (don't forget `/g` in the regular expression if you want to find all matching substrings!)
+- `search`: a string or `RegExp` to replace (don't forget `/g` in the regular expression if you want to find all matching substrings!)
 - `replacer`: either an HTML string to replace with; or a function that accepts the matching text and returns an HTML string, a `Node` (e. g. created using `document.createElement(name)`) or an array of `Node`s
 
 Returns an HTML string.
