@@ -21,9 +21,6 @@ export default function replaceInHtml(html, search, replacer) {
 }
 
 function replaceInCurrentNode(doc, treeWalker, regex, replacer) {
-  if (!treeWalker.currentNode.data)
-    return;
-
   if (["SCRIPT", "STYLE", "TEXTAREA"].includes(treeWalker.currentNode.parentElement.tagName))
     return;
 
