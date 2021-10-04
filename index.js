@@ -24,10 +24,6 @@ function replaceInCurrentNode(doc, tw, re, fn) {
   if (["SCRIPT", "STYLE", "TEXTAREA"].includes(tw.currentNode.parentElement.tagName))
     return;
 
-  // CDATA isn't supported in HTML, but just in case
-  if (tw.currentNode instanceof CDATASection)
-    return;
-
   let matches = tw.currentNode.data.match(re);
   if (matches === null)
     return;
