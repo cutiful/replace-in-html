@@ -18,11 +18,11 @@ replaceInHtml(
   `<div><code>replacer</code> can be a string or a function returning $return_types</div>`,
   /\$return_types/g,
   match => {
-  	const el = document.createElement("span");
-  	el.className = match.slice(1);
-  	el.innerHTML = "a string, DOM Node or an array of DOM Nodes";
+    const el = document.createElement("span");
+    el.className = match.slice(1);
+    el.innerHTML = "a string, DOM Node or an array of DOM Nodes";
 
-  	return el;
+    return el;
   },
 );
 // <div><code>replacer</code> can be a string or a function returning <span class="return_types">a string, DOM Node or an array of DOM Nodes</span></div>
@@ -32,12 +32,12 @@ replaceInHtml(
   <p>How about... :lightbulb: custom emoji tags? :blobcat:</p>`,
   /:[a-zA-Z0-9_]{2,}:/g,
   match => {
-  	const el = document.createElement("img");
-  	el.className = "custom_emoji";
-  	el.alt = el.title = match;
-  	el.src = `https://cdn.example.org/i/emoji/${match.slice(1, -1)}.png`;
+    const el = document.createElement("img");
+    el.className = "custom_emoji";
+    el.alt = el.title = match;
+    el.src = `https://cdn.example.org/i/emoji/${match.slice(1, -1)}.png`;
 
-  	return el;
+    return el;
   },
 );
 // <p>So let's try an example closer to the real world<img class="custom_emoji" title=":question:" alt=":question:" src="https://cdn.example.org/i/emoji/question.png"></p>
