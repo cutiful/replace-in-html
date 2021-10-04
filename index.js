@@ -4,64 +4,64 @@ export default function replaceInHtml(html, search, replacer) {
   if (/(?:<html>|<head>|<body>)/.test(html))
     throw new Error("`html` must not contain <html>, <head> or <body>");
 
-  const regex = typeof search === "string" ? aToRe(search) : search;
-  if (!(regex instanceof RegExp))
-    throw new Error("`search` must be either a string or a RegExp");
+  const re = typeof search === "string" ? aToRe(search) : search;
+  if (!(re instanceof RegExp))
+    throw new Error("`search` must be a string or a RegExp");
 
   const fn = typeof replacer === "string" ? () => replacer : replacer;
   if (typeof fn !== "function")
-    throw new Error("`replacer` must be either a string or a function");
+    throw new Error("`replacer` must be a string or a function");
 
   const doc = new DOMParser().parseFromString(`<body>${html}</body>`, "text/html");
-  const treeWalker = doc.createTreeWalker(doc.body, 4);
-  while (treeWalker.nextNode())
-    replaceInCurrentNode(doc, treeWalker, regex, fn);
+  const tw = doc.createTreeWalker(doc.body, 4);
+  while (tw.nextNode())
+    replaceInCurrentNode(doc, tw, re, fn);
 
   return doc.body.innerHTML;
 }
 
-function replaceInCurrentNode(doc, treeWalker, regex, replacer) {
-  if (["SCRIPT", "STYLE", "TEXTAREA"].includes(treeWalker.currentNode.parentElement.tagName))
+function replaceInCurrentNode(doc, tw, re, fn) {
+  if (["SCRIPT", "STYLE", "TEXTAREA"].includes(tw.currentNode.parentElement.tagName))
     return;
 
   // CDATA isn't supported in HTML, but just in case
-  if (treeWalker.currentNode instanceof CDATASection)
+  if (tw.currentNode instanceof CDATASection)
     return;
 
-  let matches = treeWalker.currentNode.data.match(regex);
+  let matches = tw.currentNode.data.match(re);
   if (matches === null)
     return;
 
-  if (regex.sticky || !regex.global) // sticky ignores global
+  if (re.sticky || !re.global) // sticky ignores global
     matches = [matches[0]]; // the rest are capture groups
 
   for (const match of matches) {
-    const elements = toElementArray(replacer(match), doc);
-    const index = treeWalker.currentNode.data.indexOf(match);
+    const els = toElArr(fn(match), doc);
+    const i = tw.currentNode.data.indexOf(match);
 
-    treeWalker.currentNode.splitText(index);
-    const target = treeWalker.nextSibling();
+    tw.currentNode.splitText(i);
+    const target = tw.nextSibling();
 
-    treeWalker.currentNode.splitText(match.length);
-    const next = treeWalker.nextSibling();
+    tw.currentNode.splitText(match.length);
+    const next = tw.nextSibling();
 
     target.parentElement.removeChild(target);
-    for (const element of elements)
-      next.parentElement.insertBefore(element, next);
+    for (const el of els)
+      next.parentElement.insertBefore(el, next);
   }
 }
 
-function toElementArray(elements, doc) {
-  if (typeof elements === "string") {
-    const parent = doc.createElement("div");
-    parent.innerHTML = elements;
-    return [...parent.childNodes];
-  } else if (elements instanceof HTMLCollection) {
-    return [...elements];
-  } else if (Array.isArray(elements)) {
-    return elements;
-  } else if (elements instanceof Node) {
-    return [elements];
+function toElArr(els, doc) {
+  if (typeof els === "string") {
+    const div = doc.createElement("div");
+    div.innerHTML = els;
+    return [...div.childNodes];
+  } else if (els instanceof HTMLCollection) {
+    return [...els];
+  } else if (Array.isArray(els)) {
+    return els;
+  } else if (els instanceof Node) {
+    return [els];
   } else {
     throw new Error("`replacer` function must return string, Node, Array of Nodes or HTMLCollection");
   }
