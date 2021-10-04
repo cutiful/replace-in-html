@@ -13,7 +13,7 @@ export default function replaceInHtml(html, search, replacer) {
     throw new Error("`replacer` must be a string or a function");
 
   const doc = new DOMParser().parseFromString(`<body>${html}</body>`, "text/html");
-  const tw = doc.createTreeWalker(doc.body, 4);
+  const tw = doc.createTreeWalker(doc.body, 4); // text nodes only
   while (tw.nextNode())
     replaceInCurrentNode(doc, tw, re, fn);
 
@@ -35,15 +35,31 @@ function replaceInCurrentNode(doc, tw, re, fn) {
     const els = toElArr(fn(match), doc);
     const i = tw.currentNode.data.indexOf(match);
 
+    // [siblings?] [<text?> <match> <text?>]
+    //             ^ currentNode (was `next` in previous iteration)
+
     tw.currentNode.splitText(i);
     const target = tw.nextSibling();
+
+    // [siblings?] [<text?>] [<match> <text?>]
+    //                       ^ currentNode = target
 
     tw.currentNode.splitText(match.length);
     const next = tw.nextSibling();
 
+    // [siblings?] [<text?>] [<match>] [<text?>]
+    //                       ^ target  ^ currentNode = next
+
     target.parentElement.removeChild(target);
+
+    // [siblings?] [<text?>] [<text?>]
+    //                       ^ currentNode = next
+
     for (const el of els)
       next.parentElement.insertBefore(el, next);
+
+    // [siblings?] [<text?>] [el] [el?] ... [<text?>]
+    //                                      ^ currentNode
   }
 }
 
