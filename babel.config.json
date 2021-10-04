@@ -1,0 +1,10 @@
+{
+  "moduleId": "replaceInHtml",
+  "presets": [
+    ["@babel/preset-env", { "modules": "umd" }]
+  ],
+  "exclude": ["transform-regenerator"],
+  "sourceMaps": true,
+  "minified": true,
+  "comments": false
+}

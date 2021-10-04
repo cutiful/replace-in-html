@@ -1,0 +1,32 @@
+{
+  "name": "replace-in-html",
+  "version": "1.0.0",
+  "description": "Replace text in HTML strings without messing up element attributes.",
+  "main": "dist/replace-in-html.js",
+  "files": [
+    "dist/*"
+  ],
+  "keywords": [
+    "html",
+    "replace",
+    "find and replace"
+  ],
+  "homepage": "https://github.com/cutiful/replace-in-html#readme",
+  "bugs": "https://github.com/cutiful/replace-in-html/issues",
+  "repository": "github:cutiful/replace-in-html",
+  "author": "Spring Raindrop",
+  "license": "CDDL-1.0",
+  "private": false,
+  "browserslist": "> 0.25%, firefox >= 52, last 6 versions, not dead, not chrome 49, not ie > 0, not baidu > 0, not op_mini all",
+  "scripts": {
+    "build": "babel index.js -o dist/replace-in-html.js",
+    "test": "jest --coverage"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.15.7",
+    "@babel/core": "^7.15.5",
+    "@babel/preset-env": "^7.15.6",
+    "babel-jest": "^27.2.4",
+    "jest": "^27.2.4"
+  }
+}
