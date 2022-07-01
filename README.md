@@ -90,11 +90,6 @@ that doesn't have access to your page; traverses it, replaces any matching text
 and returns the resulting body. It's safe, small and decently fast. (Note that
 if you're processing user-generated HTML, you still have to sanitize it.)
 
-## CommonJS build?
-`replace-in-html` doesn't have external dependencies, so it doesn't need a
-separate CommonJS build. The UMD build works in Browserify, Webpack, require.js
-and browsers. If you want to use it in Node, you'll have to include JSDOM.
-
 <!---
 ## Signature
 ```ts
