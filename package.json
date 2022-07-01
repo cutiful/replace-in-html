@@ -2,10 +2,6 @@
   "name": "replace-in-html",
   "version": "1.0.2",
   "description": "Replace text in HTML strings without messing up element attributes.",
-  "main": "dist/replace-in-html.js",
-  "files": [
-    "dist/*"
-  ],
   "keywords": [
     "html",
     "replace",
@@ -16,20 +12,48 @@
   "repository": "github:cutiful/replace-in-html",
   "author": "Spring Raindrop",
   "license": "CDDL-1.0",
+  "type": "module",
+  "files": [
+    "dist/*"
+  ],
+  "main": "./dist/replace.js",
+  "browser": "./dist/replace.min.js",
+  "exports": {
+    "import": "./dist/replace.mjs",
+    "require": "./dist/replace.cjs",
+    "browser": "./dist/replace.min.js",
+    "default": "./dist/replace.cjs"
+  },
   "private": false,
-  "browserslist": "> 0.25%, firefox >= 52, last 6 versions, not dead, not chrome 49, not ie > 0, not baidu > 0, not op_mini all",
+  "browserslist": "node >= 12, firefox >= 52",
   "scripts": {
-    "build": "babel index.js -o dist/replace-in-html.js",
-    "test": "jest --coverage"
+    "build": "rollup -c",
+    "lint": "run-s -c lint:*",
+    "lint:eslint": "eslint .",
+    "lint:prettier": "prettier --check .",
+    "fix": "run-s -c fix:*",
+    "fix:eslint": "eslint --fix .",
+    "fix:prettier": "prettier --write .",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
+    "prepublishOnly": "run-s build"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.18.6"
   },
   "devDependencies": {
     "@babel/cli": "^7.18.6",
     "@babel/core": "^7.18.6",
+    "@babel/plugin-transform-runtime": "^7.18.6",
     "@babel/preset-env": "^7.18.6",
+    "@rollup/plugin-babel": "^5.3.1",
     "babel-jest": "^28.1.2",
-    "jest": "^28.1.2"
-  },
-  "dependencies": {
-    "jest-environment-jsdom": "^28.1.2"
+    "cross-env": "^7.0.3",
+    "eslint-config-prettier": "^8.5.0",
+    "jest": "^28.1.2",
+    "jest-environment-jsdom": "^28.1.2",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.7.1",
+    "rollup": "^2.75.7",
+    "rollup-plugin-terser": "^7.0.2"
   }
 }
