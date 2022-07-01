@@ -12,23 +12,29 @@ export default function replaceInHtml(html, search, replacer) {
   if (typeof fn !== "function")
     throw new Error("`replacer` must be a string or a function");
 
-  const doc = new DOMParser().parseFromString(`<body>${html}</body>`, "text/html");
+  const doc = new DOMParser().parseFromString(
+    `<body>${html}</body>`,
+    "text/html"
+  );
   const tw = doc.createTreeWalker(doc.body, 4); // text nodes only
-  while (tw.nextNode())
-    replaceInCurrentNode(doc, tw, re, fn);
+  while (tw.nextNode()) replaceInCurrentNode(doc, tw, re, fn);
 
   return doc.body.innerHTML;
 }
 
 function replaceInCurrentNode(doc, tw, re, fn) {
-  if (["SCRIPT", "STYLE", "TEXTAREA"].includes(tw.currentNode.parentElement.tagName))
+  if (
+    ["SCRIPT", "STYLE", "TEXTAREA"].includes(
+      tw.currentNode.parentElement.tagName
+    )
+  )
     return;
 
   let matches = tw.currentNode.data.match(re);
-  if (matches === null)
-    return;
+  if (matches === null) return;
 
-  if (re.sticky || !re.global) // sticky ignores global
+  if (re.sticky || !re.global)
+    // sticky ignores global
     matches = [matches[0]]; // the rest are capture groups
 
   for (const match of matches) {
@@ -55,8 +61,7 @@ function replaceInCurrentNode(doc, tw, re, fn) {
     // [siblings?] [<text?>] [<text?>]
     //                       ^ currentNode = next
 
-    for (const el of els)
-      next.parentElement.insertBefore(el, next);
+    for (const el of els) next.parentElement.insertBefore(el, next);
 
     // [siblings?] [<text?>] [el] [el?] ... [<text?>]
     //                                      ^ currentNode
@@ -75,7 +80,9 @@ function toElArr(els, doc) {
   } else if (els instanceof Node) {
     return [els];
   } else {
-    throw new Error("`replacer` function must return string, Node, Array of Nodes or HTMLCollection");
+    throw new Error(
+      "`replacer` function must return string, Node, Array of Nodes or HTMLCollection"
+    );
   }
 }
 
