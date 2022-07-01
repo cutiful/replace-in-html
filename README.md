@@ -66,9 +66,9 @@ console.log(replaced);
 
 ### Browser
 ```html
-<script src="https://unpkg.com/replace-in-html@1.0.1/dist/replace-in-html.js"></script>
+<script src="https://unpkg.com/replace-in-html"></script>
 <script>
-  const replaced = window.replaceInHtml.default("<p>original html</p>", /original/g, "modified");
+  const replaced = window.replaceInHtml("<p>original html</p>", /original/g, "modified");
   console.log(replaced);
 </script>
 ```
