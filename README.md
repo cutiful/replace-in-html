@@ -46,9 +46,16 @@ replaceInHtml(
 
 ## Installation
 ### Webpack / Rollup
+NPM:
 ```sh
-$ yarn add replace-in-html
+npm install replace-in-html
 ```
+
+Yarn:
+```sh
+yarn add replace-in-html
+```
+
 then in JS:
 ```js
 import replaceInHtml from "replace-in-html";
